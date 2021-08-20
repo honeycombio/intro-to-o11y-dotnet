@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebApplication</title>
+    
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+  <nav>
+      <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Fibonacci Microservice</a>
+      <ul>
+          <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>     
+      </ul>
+  </nav>
+
+  <main>
+      @RenderBody()
+  </main>
+
+  <hr />
+
+  <footer>
+      
+  </footer>
+        
+  <script src="~/js/site.js" asp-append-version="true"></script>    
+
+  @RenderSection("Scripts", required: false)
+</body>
+</html>
