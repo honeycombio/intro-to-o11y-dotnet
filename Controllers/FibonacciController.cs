@@ -1,48 +1,56 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebApplication.Models;
 using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using OpenTelemetry.Trace;
 
-namespace WebApplication.Controllers
+namespace fib.Controllers
 {
-    [Route("/fib")]
     [ApiController]
+    [Route("/fib")]
     public class FibonacciController : ControllerBase
     {
+        private readonly Tracer _tracer;
         private readonly IHttpClientFactory _clientFactory;
-        private readonly String _projectDomain = Environment.GetEnvironmentVariable("PROJECT_DOMAIN");
-        
-        public FibonacciController(IHttpClientFactory clientFactory)
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IHttpContextAccessor _accessor;
+
+        public FibonacciController(Tracer tracer, IHttpClientFactory clientFactory, LinkGenerator linkGenerator, IHttpContextAccessor accessor)
         {
-          _clientFactory = clientFactory;
+            _tracer = tracer;
+            _clientFactory = clientFactory;
+            _linkGenerator = linkGenerator;
+            _accessor = accessor;
         }
-        
+
         [HttpGet]
-        public async Task<ActionResult<int>> CalculateFibonacci(int index = 0)
+        public async Task<int> CalculateFibonacciAsync(int index = 0)
         {
-            int iv = index;
-            System.Diagnostics.Activity.Current.AddTag("parameter", iv.ToString());
-          
-            var client = _clientFactory.CreateClient();
-            if (iv == 0) {
-              return 0;
-            } else if (iv == 1) {
-              return 1;
-            } else {
-              var requestOne = new HttpRequestMessage(HttpMethod.Get, $"http://{_projectDomain}.glitch.me/fib/?index={iv - 1}");
-              var requestTwo = new HttpRequestMessage(HttpMethod.Get, $"http://{_projectDomain}.glitch.me/fib/?index={iv - 2}");
-              var resOne = await client.SendAsync(requestOne);
-              var resTwo = await client.SendAsync(requestTwo);
-              resOne.EnsureSuccessStatusCode();
-              resTwo.EnsureSuccessStatusCode();
-              var resultOne = await resOne.Content.ReadAsStringAsync();
-              var resultTwo = await resTwo.Content.ReadAsStringAsync();
-              var finalResult = Int32.Parse(resultOne) + Int32.Parse(resultTwo);
-              return finalResult;
+            var iv = index;
+            using (var span = _tracer.StartActiveSpan("fibonacci"))
+            {
+                span.SetAttribute("parameter.index", iv);
+
+                if (iv == 0)
+                    return 0;
+                if (iv == 1)
+                    return 1;
+
+                var result = await GetNext(iv - 1) + await GetNext(iv - 2);
+                span.SetAttribute("result", result);
+                return result;
+            }
+        }
+
+        private async Task<int> GetNext(int iv)
+        {
+            using (var client = _clientFactory.CreateClient())
+            {
+                var url = this._linkGenerator.GetUriByPage(this._accessor.HttpContext, page: null, handler: null);
+                var resp = await client.GetAsync($"{url}?index={iv}");
+                resp.EnsureSuccessStatusCode();
+                return int.Parse(await resp.Content.ReadAsStringAsync());
             }
         }
     }

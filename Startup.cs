@@ -1,22 +1,22 @@
-using System;
-using System.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using Honeycomb.OpenTelemetry;
 
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-
-namespace WebApplication
+namespace fib
 {
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -24,52 +24,37 @@ namespace WebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
+
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "fib", Version = "v1" });
             });
-      
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddHoneycomb(this.Configuration);
             services.AddHttpClient();
-            services.AddOpenTelemetryTracing((builder) => builder
-                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("my-service"))
-                .AddAspNetCoreInstrumentation()
-                .AddHttpClientInstrumentation()
-                // console - uncomment this to see traces in the logs
-            //   .AddConsoleExporter()
-                // honeycomb
-                .AddOtlpExporter(otlpOptions =>
-                {
-                    otlpOptions.Endpoint = new Uri("https://api.honeycomb.io");
-                    otlpOptions.Headers = string.Format("x-honeycomb-team={0},x-honeycomb-dataset={1}", 
-                                                        Environment.GetEnvironmentVariable("HONEYCOMB_API_KEY"),
-                                                        Environment.GetEnvironmentVariable("HONEYCOMB_DATASET"));
-                })
-              );
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "fib v1"));
             }
 
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseHttpsRedirection();
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }
