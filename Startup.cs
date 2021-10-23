@@ -3,20 +3,22 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Honeycomb.OpenTelemetry;
 
-namespace fib
+using Honeycomb.OpenTelemetry;
+using OpenTelemetry.Context.Propagation;
+using System.Collections.Generic;
+using System;
+using System.Collections.Immutable;
+
+
+
+namespace glitch_dotnet
 {
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables();
-
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -24,16 +26,56 @@ namespace fib
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "fib", Version = "v1" });
-            });
-
-            services.AddHoneycomb(this.Configuration);
+            services.AddRazorPages();
             services.AddHttpClient();
-            services.AddHttpContextAccessor();
+
+            OpenTelemetry.Sdk.SetDefaultTextMapPropagator(new IgnoreTraceHeadersOnForwardedRequests(Propagators.DefaultTextMapPropagator));
+            // Configure Honeycomb using Configuration
+            services.AddHoneycomb(Configuration);
+        }
+
+        class IgnoreTraceHeadersOnForwardedRequests : TextMapPropagator
+        {
+            private TextMapPropagator _base;
+            public IgnoreTraceHeadersOnForwardedRequests(TextMapPropagator otherPropagator)
+            {
+                _base = otherPropagator;
+            }
+
+            public override ISet<string> Fields
+            {
+                get
+                {
+                    var fields = _base.Fields;
+                    fields.Add("x-forwarded-for");
+                    return fields;
+                }
+            }
+
+            public override PropagationContext Extract<T>(PropagationContext context, T carrier, Func<T, string, IEnumerable<string>> getter)
+            {
+                var xff = getter(carrier, "x-forwarded-for"); // what happens when it is not there?
+                if (xff.ToImmutableList().IsEmpty)
+                {
+                    // header absent: use the standard extraction mechanism
+                    return _base.Extract(context, carrier, getter);
+                }
+                else
+                {
+                    // header present: do not extract any trace information from the headers. Return the unmodified context
+                    return context;
+                }
+            }
+
+            public override void Inject<T>(PropagationContext context, T carrier, Action<T, string, string> setter)
+            {
+                _base.Inject(context, carrier, setter);
+            }
+
+            public override string ToString()
+            {
+                return "I AM THE WALRUS";
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,11 +84,15 @@ namespace fib
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "fib v1"));
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection(); // removing this makes it work locally!
+            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -54,6 +100,7 @@ namespace fib
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
         }
