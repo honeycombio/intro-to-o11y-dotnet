@@ -1,6 +1,6 @@
-# glitch-otel-dotnet
+# Introduction to Observability in .NET 5
 
-This repo hosts a .NET5 demo used by [Glitch OpenTelemetry demo for .NET]([intro-to-o11y-dotnet](https://glitch.com/~intro-to-o11y-dotnet)).
+This repo hosts a .NET5 version of a demo used by [Glitch OpenTelemetry demo for .NET]([intro-to-o11y-dotnet](https://glitch.com/~intro-to-o11y-dotnet)).
 
 # Run
 
@@ -19,7 +19,9 @@ a whole microservice ecosystem with just one service!
 
 ## What to do
 
-You can remix this app on Glitch or [clone the repo](https://github.com/jessitron/otel-dotnet) and open it in your IDE.
+Clone this and run it in VSCode or Visual Studio.
+
+If you use Docker and VSCode's Remote Container Extension, then you can start this repo in a container with the .NET runtime you need.
 
 ### 1. Autoinstrument!
 
