@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "glitch_dotnet": {
+    "intro_to_observability_dotnet": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>glitch_dotnet</RootNamespace>
+    <RootNamespace>intro_to_observability_dotnet</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

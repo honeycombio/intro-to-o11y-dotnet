@@ -93,3 +93,11 @@ based on environment variables.
 
 You'll see the web requests coming in. They'll even nest inside each other when the service calls itself. You will not yet
 see information that is special to this app, like the query parameter on the request.
+
+## Troubleshooting
+
+If you see this error: `Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object.`
+... then you probably need to define the `HONEYCOMB__APIKEY` environment variable before running the app.
+
+If you see the warnings `Unable to bind to https://localhost:5001 on the IPv6 loopback interface: 'Cannot assign requested address'.` or `Unable to bind to http://localhost:5000 on the IPv6 loopback interface: 'Cannot assign requested address'.`
+... then ignore it. We aren't using IPv6 here.

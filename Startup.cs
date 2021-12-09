@@ -12,7 +12,7 @@ using System.Collections.Immutable;
 
 
 
-namespace glitch_dotnet
+namespace intro_to_observability_dotnet
 {
     public class Startup
     {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace glitch_dotnet
+namespace intro_to_observability_dotnet
 {
     public class Program
     {
