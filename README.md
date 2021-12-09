@@ -1,17 +1,4 @@
-# Introduction to Observability in .NET 5
-
-This repo hosts a .NET5 version of a demo used by [Glitch OpenTelemetry demo for .NET]([intro-to-o11y-dotnet](https://glitch.com/~intro-to-o11y-dotnet)).
-
-# Run
-
-```sh
-export HONEYCOMB__APIKEY=<your api key here>
-export HONEYCOMB__DATASET=otel-dotnet # or whatever value you prefer
-
-dotnet run
-```
-
-# Into to Observability: OpenTelemetry in .NET
+# Intro to Observability: OpenTelemetry in .NET
 
 This ASP.NET application is here for you to try out tracing.
 It consists of a microservice that calls itself, so you can simulate
@@ -21,34 +8,24 @@ a whole microservice ecosystem with just one service!
 
 Clone this and run it in VSCode or Visual Studio.
 
-If you use Docker and VSCode's Remote Container Extension, then you can start this repo in a container with the .NET runtime you need.
+If you use Docker and [VSCode's Remote Container Extension](https://code.visualstudio.com/docs/remote/containers-tutorial),
+ then you can start this repo in a container with the .NET runtime you need.
 
-### 1. Autoinstrument!
+# Configure and Run
 
-This tracing happens with only one code change!
+```sh
+export HONEYCOMB__APIKEY=<your api key here>
+export HONEYCOMB__DATASET=otel-dotnet # or whatever value you prefer
 
-See the "Tracing!" comment in `Startup.cs`. That is where OpenTelemetry instrumentation is set up.
-
-This sets up auto-instrumentation for ASP.NET Core, and configures it to send to Honeycomb
-based on environment variables.
-
-You'll see the web requests coming in. They'll even nest inside each other when the service calls itself. You will not yet
-see information that is special to this app, like the query parameter on the request.
-
-#### Configure the connection to Honeycomb
-
-In `.env` in glitch or your run configuration in your IDE, add these
-environment variables:
-
-```
-HONEYCOMB_API_KEY=replace-this-with-a-real-api-key
-HONEYCOMB_DATASET=otel-dotnet
+dotnet run
 ```
 
 Get a Honeycomb API Key from your Team Settings in [Honeycomb](https://ui.honeycomb.io).
 (find this by clicking on your profile in the lower-left corner.)
 
 You can name the Honeycomb Dataset anything you want.
+
+The app runs at http://localhost:5000
 
 #### See the results
 
@@ -103,3 +80,16 @@ Find the "CUSTOM SPAN" comment, and uncomment the sections below it.
 After a restart, do your traces show this extra span? Do you see the name of your method?
 What percentage of the service time is spend in it?
 
+## How does this work?
+
+Autoinstrumentation!
+
+This tracing happens with only one code change.
+
+See the "Tracing!" comment in `Startup.cs`. That is where OpenTelemetry instrumentation is set up.
+
+This sets up auto-instrumentation for ASP.NET Core, and configures it to send to Honeycomb
+based on environment variables.
+
+You'll see the web requests coming in. They'll even nest inside each other when the service calls itself. You will not yet
+see information that is special to this app, like the query parameter on the request.
