@@ -1,4 +1,1 @@
-
-image:
-  file: .devcontainer/Dockerfile
-
+image: gitpod/workspace-dotnet
