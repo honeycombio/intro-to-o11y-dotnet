@@ -10,12 +10,28 @@ Recommended:
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/honeycombio/intro-to-o11y-dotnet)
 
+
 Or run locally:
 
 Clone this and run it in VSCode or Visual Studio.
 
-If you use Docker and [VSCode's Remote Container Extension](https://code.visualstudio.com/docs/remote/containers-tutorial),
- then you can start this repo in a container with the .NET runtime you need.
+### Starting the app
+
+`dotnet run`
+
+
+### Accessing the app
+
+In GitPod: while it's running, click "Remote Explorer" on the left sidebar; then expand "ports" and look for a "preview" button.
+
+Localy: [http://localhost:5000]()
+
+### Stopping the app
+
+Push Ctrl-C in the terminal where it's running.
+
+
+
 
 # Configure and Run
 
@@ -109,6 +125,8 @@ Check [the .csproj file](https://github.com/honeycombio/intro-to-o11y-dotnet/blo
 Update the version in the .csproj file if necessary, and then 'dotnet run' will get the new version.
 
 ## Troubleshooting
+
+Our documentation: [https://docs.honeycomb.io/getting-data-in/dotnet/opentelemetry-distro/]()
 
 If you see this error: `Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object.`
 ... then you probably need to define the `HONEYCOMB__APIKEY` environment variable before running the app.
