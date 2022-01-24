@@ -6,6 +6,11 @@ a whole microservice ecosystem with just one service!
 
 ## What to do
 
+Recommended: 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/honeycombio/intro-to-o11y-dotnet)
+
+Or run locally:
+
 Clone this and run it in VSCode or Visual Studio.
 
 If you use Docker and [VSCode's Remote Container Extension](https://code.visualstudio.com/docs/remote/containers-tutorial),
