@@ -7,6 +7,7 @@ a whole microservice ecosystem with just one service!
 ## What to do
 
 Recommended: 
+
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/honeycombio/intro-to-o11y-dotnet)
 
 Or run locally:
@@ -105,7 +106,7 @@ For maintaining this project, this section reminds us how to check that we're on
 
 Check [the .csproj file](https://github.com/honeycombio/intro-to-o11y-dotnet/blob/main/intro-to-observability-dotnet.csproj) against [the latest release](https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/releases).
 
-Update if necessary, and then ... hmm, maybe 'dotnet run' will update it?
+Update the version in the .csproj file if necessary, and then 'dotnet run' will get the new version.
 
 ## Troubleshooting
 
