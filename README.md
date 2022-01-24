@@ -94,6 +94,14 @@ based on environment variables.
 You'll see the web requests coming in. They'll even nest inside each other when the service calls itself. You will not yet
 see information that is special to this app, like the query parameter on the request.
 
+## Updating libraries
+
+For maintaining this project, this section reminds us how to check that we're on the latest Honeycomb OpenTelemetry Distribution for .NET.
+
+Check [the .csproj file](https://github.com/honeycombio/intro-to-o11y-dotnet/blob/main/intro-to-observability-dotnet.csproj) against [the latest release](https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/releases).
+
+Update if necessary, and then ... hmm, maybe 'dotnet run' will update it?
+
 ## Troubleshooting
 
 If you see this error: `Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object.`
