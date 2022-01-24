@@ -19,7 +19,6 @@ Clone this and run it in VSCode or Visual Studio.
 
 `dotnet run`
 
-
 ### Accessing the app
 
 In GitPod: while it's running, click "Remote Explorer" on the left sidebar; then expand "ports" and look for a "preview" button.
@@ -30,14 +29,11 @@ Localy: [http://localhost:5000]()
 
 Push Ctrl-C in the terminal where it's running.
 
-
-
-
-# Configure and Run
+# Connect to Honeycomb
 
 ```sh
 export HONEYCOMB__APIKEY=<your api key here>
-export HONEYCOMB__DATASET=otel-dotnet # or whatever value you prefer
+export HONEYCOMB__DATASET=hello-observability # optional; this one will default to this. You can choose your own
 
 dotnet run
 ```
@@ -51,18 +47,16 @@ The app runs at http://localhost:5000
 
 #### See the results
 
-Run the app. Push "Go" to activate the sequence of numbers. (and then stop it!)
+Run the app. Push "Go" to activate the sequence of numbers, the "Stop".
+Do that several times.
+
 Go to [Honeycomb](https://ui.honeycomb.io) and choose the Dataset you configured.
 
-How many traces are there?
+In Part 2 of the workshop, explore the data you find there.
 
-How many spans are in the traces?
+## Customize a span: custom attributes
 
-Why are there so many??
-
-Which trace has the most, and why is it different?
-
-## 2. Customize a span: custom attributes
+This is for Part 3 of the workshop.
 
 Let's make it easier to see what the "index" query parameter is.
 
