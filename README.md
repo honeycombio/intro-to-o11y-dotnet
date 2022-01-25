@@ -31,6 +31,8 @@ Push Ctrl-C in the terminal where it's running.
 
 # Connect to Honeycomb
 
+Hint: You can configure this in appsetting.json instead, but try not to commit that file to git with your API key in it.
+
 ```sh
 export HONEYCOMB__APIKEY=<your api key here>
 export HONEYCOMB__DATASET=hello-observability # optional; this one will default to this. You can choose your own
