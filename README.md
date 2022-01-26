@@ -25,6 +25,8 @@ In GitPod: while it's running, click "Remote Explorer" on the left sidebar; then
 
 Localy: [http://localhost:5000]()
 
+Activate the sequence of numbers by pushing **Go**. After you see numbers, push **Stop**. Try this a few times.
+
 ### Stopping the app
 
 Push Ctrl-C in the terminal where it's running.
