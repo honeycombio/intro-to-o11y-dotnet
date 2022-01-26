@@ -33,7 +33,22 @@ Push Ctrl-C in the terminal where it's running.
 
 # Connect to Honeycomb
 
-Hint: You can configure this in appsetting.json instead, but try not to commit that file to git with your API key in it.
+Our goal is to define a few environment variables. Let's put them in a file (and then not commit it).
+
+Create a .env file:
+
+`cp .env.example .env`
+
+Now open `.env`, and populate the environment variables. (This file will be ignored by git, so you won't commit your API key.)
+
+```
+export HONEYCOMB__APIKEY=replace-this-with-a-real-api-key # important and unique to you
+export HONEYCOMB__DATASET=hello-observability # can be any name
+export SERVICE_NAME=fib-microsvc # can be any name
+
+Alternative: You can configure this in appsetting.json instead, but try not to commit that file to git with your API key in it.
+
+Alternative: you can set these on the command line.
 
 ```sh
 export HONEYCOMB__APIKEY=<your api key here>
