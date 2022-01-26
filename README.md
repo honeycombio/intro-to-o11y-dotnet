@@ -1,68 +1,74 @@
 # Intro to Observability: OpenTelemetry in .NET
 
 This ASP.NET application is here for you to try out tracing.
-It consists of a microservice that calls itself, so you can simulate
-a whole microservice ecosystem with just one service!
+It consists of a microservice that calls itself, so you can simulate a whole microservice ecosystem with just one service!
 
-## What to do
+## What to Do
 
-Recommended: 
+Recommended:
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/honeycombio/intro-to-o11y-dotnet)
 
-
 Or run locally:
 
-Clone this and run it in VSCode or Visual Studio.
+Clone this repository and run it in VSCode or Visual Studio.
 
-### Starting the app
+### Starting the App
+
+In your terminal, enter:
 
 `dotnet run`
 
-### Accessing the app
+### Accessing the App
 
-In GitPod: while it's running, click "Remote Explorer" on the left sidebar; then expand "ports" and look for a "preview" button.
+In GitPod: While the app is running, select "Remote Explorer" on the left sidebar.
+Then expand **Ports**.
+Next to **3000**, choose the middle **Open Preview** icon for the app to appear in a new tab.
 
-Localy: [http://localhost:5000]()
+Locally: Go to [http://localhost:5000](http://localhost:5000)
 
 ### Stopping the app
 
-Push Ctrl-C in the terminal where it's running.
+Push `Ctrl-C` in the terminal where it's running.
 
-# Connect to Honeycomb
+## Connect to Honeycomb
 
-Hint: You can configure this in appsetting.json instead, but try not to commit that file to git with your API key in it.
+WARNING: You can configure these values in `appsetting.json` instead, but DO NOT commit that file to git with your API key in it as it is a security risk.
+
+In your terminal window, run the following command: 
 
 ```sh
 export HONEYCOMB__APIKEY=<your api key here>
-export HONEYCOMB__DATASET=hello-observability # optional; this one will default to this. You can choose your own
+export HONEYCOMB__DATASET=hello-observability # optional; this variable will default to this value. You can set your own dataset name here.
 
 dotnet run
 ```
 
 Get a Honeycomb API Key from your Team Settings in [Honeycomb](https://ui.honeycomb.io).
-(find this by clicking on your profile in the lower-left corner.)
+(Find your Honeycomb API Key by selecting your profile in the lower-left corner, and select **Team Settings**.)
 
 You can name the Honeycomb Dataset anything you want.
+Honeycomb will create your dataset once it knows your Honeycomb Dataset name.
 
-The app runs at http://localhost:5000
+The app runs at http://localhost:3000.
 
-#### See the results
+### See the Results
 
-Run the app. Push "Go" to activate the sequence of numbers, the "Stop".
-Do that several times.
+Run the app.
+Push "Go" to activate the sequence of numbers, then push "Stop".
+Repeat several times.
 
 Go to [Honeycomb](https://ui.honeycomb.io) and choose the Dataset you configured.
 
 In Part 2 of the workshop, explore the data you find there.
 
-## Customize a span: custom attributes
+## Customize a Span: Custom Attributes
 
 This is for Part 3 of the workshop.
 
 Let's make it easier to see what the "index" query parameter is.
 
-In Controllers/FibonacciController.cs, find the "CUSTOM ATTRIBUTE" comment.
+In `Controllers/FibonacciController.cs`, find the "CUSTOM ATTRIBUTE" comment.
 Uncomment these lines:
 
 ```csharp
@@ -72,57 +78,61 @@ currentSpan.SetAttribute("parameter.index", index);
 
 This will add that parameter information to the current span.
 
-Wait for the app to restart... and then try out the app again (push Go, then Stop). 
+Wait for the app to restart... and then try out the app again (push Go, then Stop).
 Can you find the field in honeycomb?
 
-### FYI, tracing is also a .NET Activity
+### FYI, Tracing is also a .NET Activity
 
 You don't even have to access OpenTelemetry directly to do this.
 You can use the built-in .NET concept of Activity.
 
 In `FibonacciController.cs`, add the index parameter as a custom attribute like this:
 
-`System.Diagnostics.Activity.Current.AddTag("parameter.index", iv.ToString());`
+```dotnet
+System.Diagnostics.Activity.Current.AddTag("parameter.index", iv.ToString());
+```
 
-Restart the app, make the sequence go, and find that field on the new spans.
+Restart the app, make the go-stop sequence happen, and find that field on the new spans.
 
-Can you make the trace waterfall view show the index? What pattern does it show?
+Can you make the trace waterfall view show the index?
+What pattern does it show?
 
-## 3. Create a custom span
+## 3. Create a Custom Span
 
-Make the calculation into its own span, to see how much of the time spent on
-this service is the meat: adding the fibonacci numbers.
+Make the fibonacci calculation into its own span.
+This will let you see how much of the time spent on this service is the meat: adding the fibonacci numbers.
 
 Find the "CUSTOM SPAN" comment, and uncomment the sections below it.
 
-After a restart, do your traces show this extra span? Do you see the name of your method?
+After a restart, do your traces show this extra span?
+Do you see the name of your method?
 What percentage of the service time is spend in it?
 
-## How does this work?
+## How Does This Work?
 
-Autoinstrumentation!
+Auto-instrumentation!
 
 This tracing happens with only one code change.
 
 See the "Tracing!" comment in `Startup.cs`. That is where OpenTelemetry instrumentation is set up.
 
-This sets up auto-instrumentation for ASP.NET Core, and configures it to send to Honeycomb
-based on environment variables.
+This sets up auto-instrumentation for ASP.NET Core, and configures it to send to Honeycomb based on environment variables.
 
-You'll see the web requests coming in. They'll even nest inside each other when the service calls itself. You will not yet
-see information that is special to this app, like the query parameter on the request.
+You'll see the web requests coming in.
+They'll even nest inside each other when the service calls itself.
+You will not yet see information that is special to this app, like the query parameter on the request.
 
-## Updating libraries
+## Updating Libraries
 
 For maintaining this project, this section reminds us how to check that we're on the latest Honeycomb OpenTelemetry Distribution for .NET.
 
 Check [the .csproj file](https://github.com/honeycombio/intro-to-o11y-dotnet/blob/main/intro-to-observability-dotnet.csproj) against [the latest release](https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/releases).
 
-Update the version in the .csproj file if necessary, and then 'dotnet run' will get the new version.
+Update the version in the `.csproj` file if necessary, and then the `dotnet run` command will get the new version.
 
 ## Troubleshooting
 
-Our documentation: [https://docs.honeycomb.io/getting-data-in/dotnet/opentelemetry-distro/]()
+Our documentation: [https://docs.honeycomb.io/getting-data-in/dotnet/opentelemetry-distro/](https://docs.honeycomb.io/getting-data-in/dotnet/opentelemetry-distro/).
 
 If you see this error: `Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object.`
 ... then you probably need to define the `HONEYCOMB__APIKEY` environment variable before running the app.
