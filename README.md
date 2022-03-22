@@ -33,32 +33,25 @@ Push Ctrl-C in the terminal where it's running.
 
 # Connect to Honeycomb
 
-Our goal is to define a few environment variables. Let's put them in a file (and then not commit it).
+Our goal is to configure the connection.
 
-Create a .env file:
+Open `appsettings.json`
 
-`cp .env.example .env`
+Find the "Honeycomb" section.
 
-Now open `.env`, and populate the environment variables. (This file will be ignored by git, so you won't commit your API key.)
+Update the "ApiKey" property. Try not to commit this file with your key in it.
 
-```
-export HONEYCOMB__APIKEY=replace-this-with-a-real-api-key # important and unique to you
-export HONEYCOMB__DATASET=hello-observability # can be any name
-export SERVICE_NAME=fib-microsvc # can be any name
-
-Alternative: You can configure this in appsetting.json instead, but try not to commit that file to git with your API key in it.
+Get a Honeycomb API Key from your Team Settings in [Honeycomb](https://ui.honeycomb.io).
+(find this by clicking on your profile in the lower-left corner.)
 
 Alternative: you can set these on the command line.
 
 ```sh
 export HONEYCOMB__APIKEY=<your api key here>
-export HONEYCOMB__DATASET=hello-observability # optional; this one will default to this. You can choose your own
+export HONEYCOMB__DATASET=hello-observability
 
 dotnet run
 ```
-
-Get a Honeycomb API Key from your Team Settings in [Honeycomb](https://ui.honeycomb.io).
-(find this by clicking on your profile in the lower-left corner.)
 
 You can name the Honeycomb Dataset anything you want.
 
