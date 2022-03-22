@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Honeycomb.OpenTelemetry" Version="0.18.0-beta" />
+    <PackageReference Include="Honeycomb.OpenTelemetry" Version="0.20.0-beta" />
   </ItemGroup>
 
 </Project>
