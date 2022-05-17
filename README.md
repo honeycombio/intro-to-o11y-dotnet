@@ -48,12 +48,12 @@ Alternative: you can set these on the command line.
 
 ```sh
 export HONEYCOMB__APIKEY=<your api key here>
-export HONEYCOMB__DATASET=hello-observability
+export HONEYCOMB__SERVICENAME=fib-microsvc
 
 dotnet run
 ```
 
-You can name the Honeycomb Dataset anything you want.
+You can use whatever service name you like.
 
 The app runs at http://localhost:5000
 
@@ -62,7 +62,7 @@ The app runs at http://localhost:5000
 Run the app. Push "Go" to activate the sequence of numbers, the "Stop".
 Do that several times.
 
-Go to [Honeycomb](https://ui.honeycomb.io) and choose the Dataset you configured.
+Go to [Honeycomb](https://ui.honeycomb.io) and choose the Dataset that matches the service name you configured (default is `fib-microsvc`).
 
 In Part 2 of the workshop, explore the data you find there.
 
