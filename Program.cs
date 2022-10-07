@@ -38,10 +38,6 @@ namespace intro_to_observability_dotnet
                              option.Headers = "x-honeycomb-team=xxxxx";
                          });
                      });
-
-                     // logBuilder.ClearProviders(); // removes all providers from LoggerFactory
-                     // logBuilder.AddConsole();
-                     // logBuilder.AddTraceSource("Information, ActivityTracing"); // Add Trace listener provider
                  })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

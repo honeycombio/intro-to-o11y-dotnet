@@ -31,8 +31,8 @@ public class FibonacciController : ControllerBase
         _logger.LogInformation("start calculate fib {index}.", index);
 
         // CUSTOM ATTRIBUTES (2 lines of code to uncomment)
-        var currentSpan = Tracer.CurrentSpan;
-        currentSpan.SetAttribute("parameter.index", index);
+        // var currentSpan = Tracer.CurrentSpan;
+        // currentSpan.SetAttribute("parameter.index", index);
 
         if (index == 0 | index == 1)
             return 0;
@@ -43,13 +43,13 @@ public class FibonacciController : ControllerBase
         var resTwo = await GetNext(index - 2);
 
         // CUSTOM SPAN (3 sections of code to uncomment, 4 lines total)
-        using (var span = _tracer.StartActiveSpan("calculation"))
-        {
-           var fibonacciNumber = resOne + resTwo;
-           span.SetAttribute("result", fibonacciNumber);
-           _logger.LogInformation("done calculate fib {result}.", fibonacciNumber);
-           return fibonacciNumber;
-        };
+        // using (var span = _tracer.StartActiveSpan("calculation"))
+        // {
+        var fibonacciNumber = resOne + resTwo;
+           // span.SetAttribute("result", fibonacciNumber);
+        _logger.LogInformation("done calculate fib {result}.", fibonacciNumber);
+        return fibonacciNumber;
+        // };
     }
 
     private async Task<int> GetNext(int iv)
