@@ -1,17 +1,10 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using OpenTelemetry.Exporter;
-using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Logs;
-using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-using OpenTelemetry;
 using System;
-using System.Diagnostics;
 using System.Net.Http;
-using System.Reflection;
 
 namespace intro_to_observability_dotnet
 {

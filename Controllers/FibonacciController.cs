@@ -5,9 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OpenTelemetry.Trace;
-using OpenTelemetry;
-using OpenTelemetry.Logs;
-using OpenTelemetry.Resources;
 
 [Route("/fib")]
 [ApiController]
@@ -46,7 +43,7 @@ public class FibonacciController : ControllerBase
         // using (var span = _tracer.StartActiveSpan("calculation"))
         // {
         var fibonacciNumber = resOne + resTwo;
-           // span.SetAttribute("result", fibonacciNumber);
+        //    span.SetAttribute("result", fibonacciNumber);
         _logger.LogInformation("done calculate fib {result}.", fibonacciNumber);
         return fibonacciNumber;
         // };
