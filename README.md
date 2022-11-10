@@ -1,6 +1,6 @@
 # Intro to Observability: OpenTelemetry in .NET
 
-This ASP.NET application is here for you to try out tracing.
+This ASP.NET application is here for you to try out tracing with Honeycomb.
 It consists of a microservice that calls itself, so you can simulate
 a whole microservice ecosystem with just one service!
 
@@ -11,9 +11,9 @@ Recommended:
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/honeycombio/intro-to-o11y-dotnet)
 
 
-Or run locally:
+Gitpod is a free cloud environment where you can run the example without needing to clone the code to your machine.
 
-Clone this and run it in VSCode or Visual Studio.
+You can also clone this repo and run the app locally in VSCode or Visual Studio.
 
 ### Starting the app
 
@@ -21,11 +21,17 @@ Clone this and run it in VSCode or Visual Studio.
 
 ### Accessing the app
 
-In GitPod: while it's running, click "Remote Explorer" on the left sidebar; then expand "ports" and look for a "preview" button.
+If you are running the app in Gitpod, navigate to the "Ports" tab and click the address for port 5000 to open the app in a new tab:
 
-Localy: [http://localhost:5000]()
+![Gitpod open address](img/gitpod-ports-dotnet.png "Gitpod open address")
 
-Activate the sequence of numbers by pushing **Go**. After you see numbers, push **Stop**. Try this a few times.
+If you are running locally, access the app at [http://localhost:5000](http://localhost:5000).
+
+Activate the sequence of numbers by selecting the **Go** button.
+After the app displays numbers, select **Stop**.
+Try this a few times.
+
+Once that works, stop the app and configure it to send traces.
 
 ### Stopping the app
 
@@ -33,7 +39,7 @@ Push Ctrl-C in the terminal where it's running.
 
 # Connect to Honeycomb
 
-Our goal is to configure the connection.
+Our goal is to configure the connection to send traces to Honeycomb.
 
 Open `appsettings.json`
 
@@ -55,7 +61,11 @@ dotnet run
 
 You can use whatever service name you like.
 
-The app runs at http://localhost:5000
+If you are running the app in Gitpod, navigate to the "Ports" tab and click the address for port 5000 to open the app in a new tab:
+
+![Gitpod open address](img/gitpod-ports-dotnet.png "Gitpod open address")
+
+If you are running locally, access the app at [http://localhost:5000](http://localhost:5000).
 
 #### See the results
 
