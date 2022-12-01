@@ -28,12 +28,16 @@ namespace intro_to_observability_dotnet
             services.AddHttpClient();
 
             OpenTelemetry.Sdk.SetDefaultTextMapPropagator(new IgnoreTraceHeadersOnForwardedRequests(Propagators.DefaultTextMapPropagator));
-            // Configure Honeycomb using Configuration
-            var honeycombOptions = Configuration.GetHoneycombOptions();
             services.AddOpenTelemetryTracing(otelBuilder =>
                 otelBuilder
-                .AddHoneycomb(honeycombOptions)
-                .AddConsoleExporter()
+// Configure relevant auto instrumentation sections
+                .AddAspNetCoreInstrumentation()
+//                .AddHttpClientInstrumentation()
+
+//  Configure exporters here, Honeycomb is configured by default
+//                .AddConsoleExporter()
+                .AddHoneycomb(Configuration.GetHoneycombOptions())
+
             );
             services.AddSingleton(TracerProvider.Default.GetTracer("SomeTracer"));       
         }
