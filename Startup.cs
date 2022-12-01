@@ -33,7 +33,9 @@ namespace intro_to_observability_dotnet
             services.AddOpenTelemetryTracing(otelBuilder =>
                 otelBuilder
                 .AddHoneycomb(honeycombOptions)
+                .AddConsoleExporter()
             );
+            services.AddSingleton(TracerProvider.Default.GetTracer("SomeTracer"));       
         }
 
 
