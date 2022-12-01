@@ -4,13 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using Honeycomb.OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
+using OpenTelemetry.Trace;
 using System.Collections.Generic;
 using System;
 using System.Collections.Immutable;
-
-
 
 namespace intro_to_observability_dotnet
 {
@@ -31,8 +29,13 @@ namespace intro_to_observability_dotnet
 
             OpenTelemetry.Sdk.SetDefaultTextMapPropagator(new IgnoreTraceHeadersOnForwardedRequests(Propagators.DefaultTextMapPropagator));
             // Configure Honeycomb using Configuration
-            services.AddHoneycomb(Configuration);
+            var honeycombOptions = Configuration.GetHoneycombOptions();
+            services.AddOpenTelemetryTracing(otelBuilder =>
+                otelBuilder
+                .AddHoneycomb(honeycombOptions)
+            );
         }
+
 
         class IgnoreTraceHeadersOnForwardedRequests : TextMapPropagator
         {
