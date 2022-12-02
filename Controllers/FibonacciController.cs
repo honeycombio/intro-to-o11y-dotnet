@@ -1,30 +1,23 @@
-using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using intro_to_observability_dotnet;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("/fib")]
-[ApiController]
 public class FibonacciController : ControllerBase
 {
-    private readonly ActivitySource _activitySource;
     private readonly IHttpClientFactory _clientFactory;
-    private readonly string _projectDomain = Environment.GetEnvironmentVariable("PROJECT_DOMAIN");
 
-    public FibonacciController(ActivitySource activitySource, IHttpClientFactory clientFactory)
+    public FibonacciController(IHttpClientFactory clientFactory)
     {
-        _activitySource = activitySource;
         _clientFactory = clientFactory;
     }
 
-    [HttpGet]
+    [HttpGet("/fib")]
     public async Task<int> CalculateFibonacciAsync(int index = 0)
     {
-        // CUSTOM ATTRIBUTES (2 lines of code to uncomment)
-        // using var span = _activitySource.StartActivity();
-        // span.AddTag("√", index);
+        // CUSTOM ATTRIBUTES (1 lines of code to uncomment)
+        // Activity.Current.SetTag("parameter.index", index);
 
         if (index == 0 | index == 1)
             return 0;
@@ -34,13 +27,11 @@ public class FibonacciController : ControllerBase
         var resOne = await GetNext(index - 1);
         var resTwo = await GetNext(index - 2);
         var fibonacciNumber = resOne + resTwo;
-        AddResultSpan(fibonacciNumber);
-        return fibonacciNumber;
-    }
 
-    private void AddResultSpan(int fibonacciNumber) {
-        // using var activity = _activitySource.StartActivity("calculation");
-        // activity.AddTag("result", fibonacciNumber);
+        // CUSTOM ATTRIBUTES (2 lines of code to uncomment)
+        // using var calculationActivity = ActivityConfig.Source.StartActivity("calculation");
+        // calculationActivity.SetTag("result", fibonacciNumber);
+        return fibonacciNumber;
     }
 
     private async Task<int> GetNext(int iv)
