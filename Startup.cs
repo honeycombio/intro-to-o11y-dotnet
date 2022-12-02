@@ -1,16 +1,18 @@
+using System.Collections.Generic;
+using System;
+using System.Collections.Immutable;
+using System.Net.Http;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
-using Honeycomb.OpenTelemetry;
+using Microsoft.Extensions.Options;
 using OpenTelemetry.Context.Propagation;
-using System.Collections.Generic;
-using System;
-using System.Collections.Immutable;
-
-
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace intro_to_observability_dotnet
 {
@@ -28,10 +30,27 @@ namespace intro_to_observability_dotnet
         {
             services.AddRazorPages();
             services.AddHttpClient();
+            services.AddSingleton(TracerProvider.Default.GetTracer("SomeTracer"));
+            var honeycombConfig = Configuration.GetHoneycombOptions();
+            services.AddSingleton(new ActivitySource(honeycombConfig.ServiceName));
 
+            services.Configure<JaegerExporterOptions>(Configuration.GetSection("Jaeger"));
+            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(services.BuildServiceProvider().GetRequiredService<IOptions<JaegerExporterOptions>>().Value.Endpoint));
             OpenTelemetry.Sdk.SetDefaultTextMapPropagator(new IgnoreTraceHeadersOnForwardedRequests(Propagators.DefaultTextMapPropagator));
-            // Configure Honeycomb using Configuration
-            services.AddHoneycomb(Configuration);
+            // services.AddHttpClient("JaegerExporter");
+            services.AddOpenTelemetryTracing(otelBuilder =>
+                otelBuilder
+                    .ConfigureResource(r => r.AddService("Samples.SampleClient"))
+                    .AddSource("Samples.SampleClient", "Samples.SampleServer")
+// Configure relevant auto instrumentation sections
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+
+//  Configure exporters here, Honeycomb is configured by default, however other exporters are commented out
+//                    .AddConsoleExporter()
+//                    .AddJaegerExporter()
+                    .AddHoneycomb(honeycombConfig)
+            );
         }
 
         class IgnoreTraceHeadersOnForwardedRequests : TextMapPropagator
