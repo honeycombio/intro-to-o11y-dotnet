@@ -1,4 +1,8 @@
-# Intro to Observability: OpenTelemetry in .NET
+# Intro to Observability: OpenTelemetry in .NET - DEPRECATED
+
+DEPRECATED - Please prefer the Meminator application as an example: https://github.com/honeycombio/meminator-workshop/
+
+## Former Description
 
 This ASP.NET application is here for you to try out tracing with Honeycomb.
 It consists of a microservice that calls itself, so you can simulate
